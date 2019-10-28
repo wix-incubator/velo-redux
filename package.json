@@ -1,0 +1,18 @@
+{
+  "name": "corvid-redux",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "test": ":",
+    "release": "wnpm-release"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "wnpm-ci": "^8.0.83"
+  }
+}
