@@ -27,7 +27,7 @@ $w.onReady(() => {
 
 TodoMVC example:
 ```js
-import { createConnect } from 'public/corvid-redux.js';
+import { createConnect } from 'corvid-redux';
 import { createStore } from 'redux';
 
 let counter = 0;
