@@ -2,6 +2,8 @@
 
 Corvid bindings for Redux.
 
+Demo: https://shahartalmi36.wixsite.com/corvid-redux
+
 Counter example:
 ```js
 import { createConnect } from 'corvid-redux';
@@ -118,6 +120,3 @@ $w.onReady(() => {
 	});
 });
 ```
-
-Live example: https://shahartalmi36.wixsite.com/corvix
-
