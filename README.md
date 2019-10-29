@@ -79,13 +79,7 @@ function rootReducer(state = initialState, action) {
       });
     case 'DELETE_TODO':
       return Object.assign({}, state, {
-        tasks: state.tasks
-          .filter(todo => todo._id !== action.id)
-          .map((todo, i) =>
-            i === 0
-              ? Object.assign({}, todo, { description: todo.description + 'a' })
-              : todo
-          )
+        tasks: state.tasks.filter(todo => todo._id !== action.id)
       });
     case 'CHECK_ALL':
       return Object.assign({}, state, {
