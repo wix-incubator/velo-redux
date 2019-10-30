@@ -46,6 +46,25 @@ describe('corvid-redux', () => {
     expect(component.text).toEqual('0');
   });
 
+  it('should not update things that did not change', async () => {
+    const component = {};
+    const store = createStore(counter);
+    const { connect } = createConnect(store);
+    connect(state => ({ text: `${state}` }))(component);
+
+    expect(component.text).toEqual(undefined);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(component.text).toEqual('0');
+
+    component.text = 'dirty';
+    store.dispatch({ type: '_DUMMY' });
+    expect(component.text).toEqual('dirty');
+    store.dispatch({ type: 'INCREMENT' });
+    expect(component.text).toEqual('1');
+    store.dispatch({ type: 'DECREMENT' });
+    expect(component.text).toEqual('0');
+  });
+
   it('should bind visibility', async () => {
     const component = {
       show: () => (component.hidden = false),
