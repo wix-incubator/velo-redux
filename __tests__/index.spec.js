@@ -46,6 +46,45 @@ describe('corvid-redux', () => {
     expect(component.text).toEqual('0');
   });
 
+  it('should bind visibility', async () => {
+    const component = {
+      show: () => (component.hidden = false),
+      hide: () => (component.hidden = true),
+    };
+    const store = createStore(counter);
+    const { connect } = createConnect(store);
+    connect(state => ({ visible: state > 0 }))(component);
+
+    expect(component.hidden).toEqual(undefined);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(component.hidden).toEqual(true);
+
+    store.dispatch({ type: 'INCREMENT' });
+    expect(component.hidden).toEqual(false);
+    store.dispatch({ type: 'DECREMENT' });
+    expect(component.hidden).toEqual(true);
+  });
+
+  it('should bind style', async () => {
+    const style = {};
+    const component = { style };
+    const store = createStore(counter);
+    const { connect } = createConnect(store);
+    connect(state => ({ style: { border: state } }))(component);
+
+    expect(component.style.border).toEqual(undefined);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(component.style.border).toEqual(0);
+    expect(component.style).toBe(style);
+
+    store.dispatch({ type: 'INCREMENT' });
+    expect(component.style.border).toEqual(1);
+    expect(component.style).toBe(style);
+    store.dispatch({ type: 'DECREMENT' });
+    expect(component.style.border).toEqual(0);
+    expect(component.style).toBe(style);
+  });
+
   it('should bind repeaters', async () => {
     let onItemReadyFn, onItemRemovedFn;
     const repeater = {
@@ -55,6 +94,71 @@ describe('corvid-redux', () => {
 
     const store = createStore(todoList);
     const { connect, repeaterConnect } = createConnect(store);
+    repeaterConnect(repeater, ($item, _id) => {
+      const task = (state, id) => state.find(todo => todo._id === id);
+      connect(state => ({ text: task(state, _id).description }))(
+        $item('#taskText'),
+      );
+    });
+
+    const components = [{}, {}];
+    store.dispatch({
+      type: 'ADD_TODO',
+      id: '1',
+      text: 'First Todo',
+    });
+    store.dispatch({
+      type: 'ADD_TODO',
+      id: '2',
+      text: 'Second Todo',
+    });
+    onItemReadyFn(x => (x === '#taskText' ? components[0] : undefined), {
+      _id: '1',
+    });
+    onItemReadyFn(x => (x === '#taskText' ? components[1] : undefined), {
+      _id: '2',
+    });
+
+    expect(components[0].text).toEqual(undefined);
+    expect(components[1].text).toEqual(undefined);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(components[0].text).toEqual('First Todo');
+    expect(components[1].text).toEqual('Second Todo');
+
+    store.dispatch({
+      type: 'UPDATE_TODO',
+      id: '1',
+      description: 'First Todo Updated',
+    });
+    expect(components[0].text).toEqual('First Todo Updated');
+    expect(components[1].text).toEqual('Second Todo');
+
+    onItemRemovedFn({ _id: '1' });
+    store.dispatch({
+      type: 'UPDATE_TODO',
+      id: '1',
+      description: 'First Todo Updated Again',
+    });
+    store.dispatch({
+      type: 'UPDATE_TODO',
+      id: '2',
+      description: 'Second Todo Updated',
+    });
+    //removed item no longer bound to changes
+    expect(components[0].text).toEqual('First Todo Updated');
+    expect(components[1].text).toEqual('Second Todo Updated');
+  });
+
+  it('should actually update repeaters after tick', async () => {
+    let onItemReadyFn;
+    const repeater = {
+      onItemReady: fn => (onItemReadyFn = fn),
+      onItemRemoved: () => undefined,
+    };
+
+    const store = createStore(todoList);
+    const { connect, repeaterConnect } = createConnect(store);
+    connect(state => ({ data: state }))({});
     repeaterConnect(repeater, ($item, _id) => {
       const task = (state, id) => state.find(todo => todo._id === id);
       connect(state => ({ text: task(state, _id).description }))(
@@ -81,15 +185,8 @@ describe('corvid-redux', () => {
       id: '1',
       description: 'First Todo Updated',
     });
-    expect(component.text).toEqual('First Todo Updated');
-
-    onItemRemovedFn({ _id: '1' });
-    store.dispatch({
-      type: 'UPDATE_TODO',
-      id: '1',
-      description: 'First Todo Updated Again',
-    });
-    //no longer bound to changes
+    expect(component.text).toEqual('First Todo');
+    await new Promise(resolve => setTimeout(resolve, 0));
     expect(component.text).toEqual('First Todo Updated');
   });
 });
