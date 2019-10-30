@@ -1,4 +1,7 @@
-self.process = { env: { NODE_ENV: 'production' } };
+/* global self */
+if (!self.process) {
+  self.process = { env: { NODE_ENV: 'production' } };
+}
 
 function updateProp(comp, prop, value) {
   if (prop === 'visible') {
@@ -24,7 +27,7 @@ export function createConnect(store) {
 
   store.subscribe(() => {
     const state = store.getState();
-    for (let x of connected) {
+    for (const x of connected) {
       const props = x.mapStateToProps(state);
       let continueLater = false;
       Object.keys(props)
@@ -60,7 +63,7 @@ export function createConnect(store) {
         }
       }
       if (mapDispatchToProps) {
-        for (let x in mapDispatchToProps) {
+        for (const x in mapDispatchToProps) {
           comp[x]((...args) => store.dispatch(mapDispatchToProps[x](...args)));
         }
       }
