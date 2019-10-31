@@ -1,8 +1,3 @@
-/* global self */
-if (!self.process) {
-  self.process = { env: { NODE_ENV: 'production' } };
-}
-
 function updateProp(comp, prop, value) {
   if (prop === 'visible') {
     const hidden = !value;
@@ -52,7 +47,7 @@ export function createConnect(store) {
     }
   }
 
-  const connect = (mapStateToProps, mapDispatchToProps) => {
+  const connect = mapStateToProps => {
     initializeIfNeeded();
     return comp => {
       if (mapStateToProps) {
@@ -60,11 +55,6 @@ export function createConnect(store) {
         connected.push(connecting);
         if (currentRepeater) {
           currentRepeater.push(connecting);
-        }
-      }
-      if (mapDispatchToProps) {
-        for (const x in mapDispatchToProps) {
-          comp[x]((...args) => store.dispatch(mapDispatchToProps[x](...args)));
         }
       }
     };
