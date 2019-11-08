@@ -1,3 +1,4 @@
+/* global $w */
 function updateProp(comp, prop, value) {
   if (prop === 'visible') {
     const hidden = !value;
@@ -17,7 +18,7 @@ function updateProp(comp, prop, value) {
 
 export function createConnect(store) {
   let connected = [],
-    timer,
+    pageConnecting,
     currentRepeater;
 
   store.subscribe(() => {
@@ -31,24 +32,14 @@ export function createConnect(store) {
           continueLater = continueLater || updateProp(x.comp, k, props[k]);
         });
       x.prevProps = props;
-      if (continueLater) {
+      if (continueLater && !pageConnecting) {
         setTimeout(() => store.dispatch({ type: '_DUMMY' }), 0);
         return;
       }
     }
   });
 
-  function initializeIfNeeded() {
-    if (!timer) {
-      timer = setTimeout(() => {
-        timer = null;
-        store.dispatch({ type: '_DUMMY' });
-      }, 0);
-    }
-  }
-
   const connect = mapStateToProps => {
-    initializeIfNeeded();
     return comp => {
       if (mapStateToProps) {
         const connecting = { comp, mapStateToProps, prevProps: {} };
@@ -67,11 +58,21 @@ export function createConnect(store) {
       currentRepeater = thisConnected[_id];
       fn($item, _id);
       currentRepeater = undefined;
+      store.dispatch({ type: '_DUMMY' });
     });
     repeater.onItemRemoved(({ _id }) => {
       connected = connected.filter(x => !thisConnected[_id].includes(x));
     });
   };
 
-  return { connect, repeaterConnect };
+  const pageConnect = fn => {
+    $w.onReady(async () => {
+      pageConnecting = true;
+      await fn();
+      pageConnecting = false;
+      store.dispatch({ type: '_DUMMY' });
+    });
+  };
+
+  return { connect, repeaterConnect, pageConnect };
 }

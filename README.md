@@ -22,9 +22,9 @@ function reducer(state = 0, action) {
 }
 
 let store = createStore(reducer);
-let { connect } = createConnect(store);
+let { connect, pageConnect } = createConnect(store);
 
-$w.onReady(() => {
+pageConnect(() => {
   connect(state => ({ text: `${state}` }))($w('#counter'));
   $w('#increment').onClick(() => store.dispatch({ type: 'INCREMENT' }));
   $w('#decrement').onClick(() => store.dispatch({ type: 'DECREMENT' }));
@@ -109,9 +109,9 @@ function getTasks(state) {
 }
 
 let store = createStore(rootReducer);
-let { connect, repeaterConnect } = createConnect(store);
+let { connect, repeaterConnect, pageConnect } = createConnect(store);
 
-$w.onReady(() => {
+pageConnect(() => {
   connect(state => ({
     checked: state.tasks.filter(x => !x.completed).length === 0
   }))($w('#checkAll'));

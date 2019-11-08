@@ -1,3 +1,4 @@
+/* global $w: true */
 import { createConnect } from '../src/index';
 import { createStore } from 'redux';
 
@@ -29,15 +30,18 @@ function todoList(state = [], action) {
   }
 }
 
+global.$w = { onReady: fn => (global.$w.ready = fn) };
+
 describe('corvid-redux', () => {
   it('should bind objects', async () => {
     const component = {};
     const store = createStore(counter);
-    const { connect } = createConnect(store);
-    connect(state => ({ text: `${state}` }))(component);
+    const { connect, pageConnect } = createConnect(store);
+    pageConnect(() => {
+      connect(state => ({ text: `${state}` }))(component);
+    });
 
-    expect(component.text).toEqual(undefined);
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await $w.ready();
     expect(component.text).toEqual('0');
 
     store.dispatch({ type: 'INCREMENT' });
@@ -49,11 +53,12 @@ describe('corvid-redux', () => {
   it('should not update things that did not change', async () => {
     const component = {};
     const store = createStore(counter);
-    const { connect } = createConnect(store);
-    connect(state => ({ text: `${state}` }))(component);
+    const { connect, pageConnect } = createConnect(store);
+    pageConnect(() => {
+      connect(state => ({ text: `${state}` }))(component);
+    });
 
-    expect(component.text).toEqual(undefined);
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await $w.ready();
     expect(component.text).toEqual('0');
 
     component.text = 'dirty';
@@ -71,11 +76,12 @@ describe('corvid-redux', () => {
       hide: () => (component.hidden = true),
     };
     const store = createStore(counter);
-    const { connect } = createConnect(store);
-    connect(state => ({ visible: state > 0 }))(component);
+    const { connect, pageConnect } = createConnect(store);
+    pageConnect(() => {
+      connect(state => ({ visible: state > 0 }))(component);
+    });
 
-    expect(component.hidden).toEqual(undefined);
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await $w.ready();
     expect(component.hidden).toEqual(true);
 
     store.dispatch({ type: 'INCREMENT' });
@@ -88,11 +94,12 @@ describe('corvid-redux', () => {
     const style = {};
     const component = { style };
     const store = createStore(counter);
-    const { connect } = createConnect(store);
-    connect(state => ({ style: { border: state } }))(component);
+    const { connect, pageConnect } = createConnect(store);
+    pageConnect(() => {
+      connect(state => ({ style: { border: state } }))(component);
+    });
 
-    expect(component.style.border).toEqual(undefined);
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await $w.ready();
     expect(component.style.border).toEqual(0);
     expect(component.style).toBe(style);
 
@@ -112,12 +119,14 @@ describe('corvid-redux', () => {
     };
 
     const store = createStore(todoList);
-    const { connect, repeaterConnect } = createConnect(store);
-    repeaterConnect(repeater, ($item, _id) => {
-      const task = (state, id) => state.find(todo => todo._id === id);
-      connect(state => ({ text: task(state, _id).description }))(
-        $item('#taskText'),
-      );
+    const { connect, pageConnect, repeaterConnect } = createConnect(store);
+    pageConnect(() => {
+      repeaterConnect(repeater, ($item, _id) => {
+        const task = (state, id) => state.find(todo => todo._id === id);
+        connect(state => ({ text: task(state, _id).description }))(
+          $item('#taskText'),
+        );
+      });
     });
 
     const components = [{}, {}];
@@ -131,16 +140,14 @@ describe('corvid-redux', () => {
       id: '2',
       text: 'Second Todo',
     });
+
+    await $w.ready();
     onItemReadyFn(x => (x === '#taskText' ? components[0] : undefined), {
       _id: '1',
     });
     onItemReadyFn(x => (x === '#taskText' ? components[1] : undefined), {
       _id: '2',
     });
-
-    expect(components[0].text).toEqual(undefined);
-    expect(components[1].text).toEqual(undefined);
-    await new Promise(resolve => setTimeout(resolve, 0));
     expect(components[0].text).toEqual('First Todo');
     expect(components[1].text).toEqual('Second Todo');
 
@@ -176,13 +183,15 @@ describe('corvid-redux', () => {
     };
 
     const store = createStore(todoList);
-    const { connect, repeaterConnect } = createConnect(store);
-    connect(state => ({ data: state }))({});
-    repeaterConnect(repeater, ($item, _id) => {
-      const task = (state, id) => state.find(todo => todo._id === id);
-      connect(state => ({ text: task(state, _id).description }))(
-        $item('#taskText'),
-      );
+    const { connect, pageConnect, repeaterConnect } = createConnect(store);
+    pageConnect(() => {
+      connect(state => ({ data: state }))({});
+      repeaterConnect(repeater, ($item, _id) => {
+        const task = (state, id) => state.find(todo => todo._id === id);
+        connect(state => ({ text: task(state, _id).description }))(
+          $item('#taskText'),
+        );
+      });
     });
 
     const component = {};
@@ -191,12 +200,11 @@ describe('corvid-redux', () => {
       id: '1',
       text: 'First Todo',
     });
+
+    await $w.ready();
     onItemReadyFn(x => (x === '#taskText' ? component : undefined), {
       _id: '1',
     });
-
-    expect(component.text).toEqual(undefined);
-    await new Promise(resolve => setTimeout(resolve, 0));
     expect(component.text).toEqual('First Todo');
 
     store.dispatch({
