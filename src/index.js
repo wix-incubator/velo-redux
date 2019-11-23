@@ -68,7 +68,7 @@ export function createConnect(store) {
   const pageConnect = fn => {
     $w.onReady(async () => {
       pageConnecting = true;
-      await fn();
+      await fn({ store, connect, repeaterConnect });
       pageConnecting = false;
       store.dispatch({ type: '_DUMMY' });
     });
