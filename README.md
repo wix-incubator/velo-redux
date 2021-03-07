@@ -4,6 +4,8 @@ Velo bindings for Redux.
 
 Demo: https://shahartalmi36.wixsite.com/velo-redux
 
+Editor: https://editor.wix.com/html/editor/web/renderer/new?metaSiteId=e1f44b70-cd35-4b6b-8bb3-ac6b19337448&siteId=bb881bf8-92da-42e9-93ae-0dc99b61cddc
+
 Counter example:
 
 ```js
