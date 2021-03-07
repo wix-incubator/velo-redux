@@ -1,8 +1,8 @@
-# corvid-redux
+# velo-redux
 
-Corvid bindings for Redux.
+Velo bindings for Redux.
 
-Demo: https://shahartalmi36.wixsite.com/corvid-redux
+Demo: https://shahartalmi36.wixsite.com/velo-redux
 
 Counter example:
 
