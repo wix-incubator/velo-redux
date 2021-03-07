@@ -11,7 +11,7 @@ function updateProp(comp, prop, value) {
     Object.assign(comp[prop], value);
   } else {
     comp[prop] = value;
-    //if repeater changed, delay further updates until redundant items are removed
+    // if repeater changed, delay further updates until redundant items are removed
     return prop === 'data';
   }
 }
@@ -27,8 +27,8 @@ export function createConnect(store) {
       const props = x.mapStateToProps(state);
       let continueLater = false;
       Object.keys(props)
-        .filter(k => props[k] !== x.prevProps[k])
-        .forEach(k => {
+        .filter((k) => props[k] !== x.prevProps[k])
+        .forEach((k) => {
           continueLater = continueLater || updateProp(x.comp, k, props[k]);
         });
       x.prevProps = props;
@@ -39,8 +39,8 @@ export function createConnect(store) {
     }
   });
 
-  const connect = mapStateToProps => {
-    return comp => {
+  const connect = (mapStateToProps) => {
+    return (comp) => {
       if (mapStateToProps) {
         const connecting = { comp, mapStateToProps, prevProps: {} };
         connected.push(connecting);
@@ -61,11 +61,11 @@ export function createConnect(store) {
       store.dispatch({ type: '_DUMMY' });
     });
     repeater.onItemRemoved(({ _id }) => {
-      connected = connected.filter(x => !thisConnected[_id].includes(x));
+      connected = connected.filter((x) => !thisConnected[_id].includes(x));
     });
   };
 
-  const pageConnect = fn => {
+  const pageConnect = (fn) => {
     $w.onReady(async () => {
       pageConnecting = true;
       await fn();

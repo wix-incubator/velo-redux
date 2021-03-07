@@ -28,10 +28,10 @@
     "release": "yoshi release"
   },
   "devDependencies": {
+    "@wix/yoshi": "^4.0.0",
     "husky": "~0.14.0",
     "lint-staged": "^7.2.2",
-    "redux": "^4.0.4",
-    "@wix/yoshi": "^4.0.0"
+    "redux": "^4.0.4"
   },
   "lint-staged": {
     "*.js": "yoshi lint"

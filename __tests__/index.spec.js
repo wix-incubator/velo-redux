@@ -18,19 +18,19 @@ function todoList(state = [], action) {
     case 'ADD_TODO':
       return state.concat({ _id: action.id, description: action.text });
     case 'UPDATE_TODO':
-      return state.map(todo =>
+      return state.map((todo) =>
         todo._id === action.id
           ? { ...todo, description: action.description }
           : todo,
       );
     case 'DELETE_TODO':
-      return state.filter(todo => todo._id !== action.id);
+      return state.filter((todo) => todo._id !== action.id);
     default:
       return state;
   }
 }
 
-global.$w = { onReady: fn => (global.$w.ready = fn) };
+global.$w = { onReady: (fn) => (global.$w.ready = fn) };
 
 describe('corvid-redux', () => {
   it('should bind objects', async () => {
@@ -38,7 +38,7 @@ describe('corvid-redux', () => {
     const store = createStore(counter);
     const { connect, pageConnect } = createConnect(store);
     pageConnect(() => {
-      connect(state => ({ text: `${state}` }))(component);
+      connect((state) => ({ text: `${state}` }))(component);
     });
 
     await $w.ready();
@@ -55,7 +55,7 @@ describe('corvid-redux', () => {
     const store = createStore(counter);
     const { connect, pageConnect } = createConnect(store);
     pageConnect(() => {
-      connect(state => ({ text: `${state}` }))(component);
+      connect((state) => ({ text: `${state}` }))(component);
     });
 
     await $w.ready();
@@ -78,7 +78,7 @@ describe('corvid-redux', () => {
     const store = createStore(counter);
     const { connect, pageConnect } = createConnect(store);
     pageConnect(() => {
-      connect(state => ({ visible: state > 0 }))(component);
+      connect((state) => ({ visible: state > 0 }))(component);
     });
 
     await $w.ready();
@@ -96,7 +96,7 @@ describe('corvid-redux', () => {
     const store = createStore(counter);
     const { connect, pageConnect } = createConnect(store);
     pageConnect(() => {
-      connect(state => ({ style: { border: state } }))(component);
+      connect((state) => ({ style: { border: state } }))(component);
     });
 
     await $w.ready();
@@ -114,16 +114,16 @@ describe('corvid-redux', () => {
   it('should bind repeaters', async () => {
     let onItemReadyFn, onItemRemovedFn;
     const repeater = {
-      onItemReady: fn => (onItemReadyFn = fn),
-      onItemRemoved: fn => (onItemRemovedFn = fn),
+      onItemReady: (fn) => (onItemReadyFn = fn),
+      onItemRemoved: (fn) => (onItemRemovedFn = fn),
     };
 
     const store = createStore(todoList);
     const { connect, pageConnect, repeaterConnect } = createConnect(store);
     pageConnect(() => {
       repeaterConnect(repeater, ($item, _id) => {
-        const task = (state, id) => state.find(todo => todo._id === id);
-        connect(state => ({ text: task(state, _id).description }))(
+        const task = (state, id) => state.find((todo) => todo._id === id);
+        connect((state) => ({ text: task(state, _id).description }))(
           $item('#taskText'),
         );
       });
@@ -142,10 +142,10 @@ describe('corvid-redux', () => {
     });
 
     await $w.ready();
-    onItemReadyFn(x => (x === '#taskText' ? components[0] : undefined), {
+    onItemReadyFn((x) => (x === '#taskText' ? components[0] : undefined), {
       _id: '1',
     });
-    onItemReadyFn(x => (x === '#taskText' ? components[1] : undefined), {
+    onItemReadyFn((x) => (x === '#taskText' ? components[1] : undefined), {
       _id: '2',
     });
     expect(components[0].text).toEqual('First Todo');
@@ -170,7 +170,7 @@ describe('corvid-redux', () => {
       id: '2',
       description: 'Second Todo Updated',
     });
-    //removed item no longer bound to changes
+    // removed item no longer bound to changes
     expect(components[0].text).toEqual('First Todo Updated');
     expect(components[1].text).toEqual('Second Todo Updated');
   });
@@ -178,17 +178,17 @@ describe('corvid-redux', () => {
   it('should actually update repeaters after tick', async () => {
     let onItemReadyFn;
     const repeater = {
-      onItemReady: fn => (onItemReadyFn = fn),
+      onItemReady: (fn) => (onItemReadyFn = fn),
       onItemRemoved: () => undefined,
     };
 
     const store = createStore(todoList);
     const { connect, pageConnect, repeaterConnect } = createConnect(store);
     pageConnect(() => {
-      connect(state => ({ data: state }))({});
+      connect((state) => ({ data: state }))({});
       repeaterConnect(repeater, ($item, _id) => {
-        const task = (state, id) => state.find(todo => todo._id === id);
-        connect(state => ({ text: task(state, _id).description }))(
+        const task = (state, id) => state.find((todo) => todo._id === id);
+        connect((state) => ({ text: task(state, _id).description }))(
           $item('#taskText'),
         );
       });
@@ -202,7 +202,7 @@ describe('corvid-redux', () => {
     });
 
     await $w.ready();
-    onItemReadyFn(x => (x === '#taskText' ? component : undefined), {
+    onItemReadyFn((x) => (x === '#taskText' ? component : undefined), {
       _id: '1',
     });
     expect(component.text).toEqual('First Todo');
@@ -213,7 +213,7 @@ describe('corvid-redux', () => {
       description: 'First Todo Updated',
     });
     expect(component.text).toEqual('First Todo');
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(component.text).toEqual('First Todo Updated');
   });
 });
