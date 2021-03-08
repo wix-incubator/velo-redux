@@ -1,6 +1,6 @@
 # velo-redux
 
-![image](https://user-images.githubusercontent.com/1764161/110261325-72b35f00-7fb8-11eb-9f2c-cd919fec95d9.png)
+![image](https://user-images.githubusercontent.com/1764161/110261469-0a18b200-7fb9-11eb-9433-5f0028ced01b.png)
 
 Velo bindings for Redux.
 
