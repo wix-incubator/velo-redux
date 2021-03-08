@@ -33,7 +33,51 @@ pageConnect(() => {
 });
 ```
 
-TodoMVC example:
+Simple TodoMVC example:
+
+```js
+import { createStore } from 'redux';
+import { createConnect } from '@wix/velo-redux';
+
+let nextId = 0;
+
+const initialState = [
+  { _id: `${++nextId}`, description: 'Task 1' },
+  { _id: `${++nextId}`, description: 'Task 2' },
+  { _id: `${++nextId}`, description: 'Task 3' }
+];
+
+function reducer(state = initialState, action) {
+  switch (action.type) {
+    case 'ADD_TODO':
+      return [...state, {_id: action.id, description: action.description}];
+    case 'REMOVE_TODO':
+      return state.filter(todo => todo._id !== action.id);
+    default:
+      return state;
+  }
+}
+
+const store = createStore(reducer);
+const {connect, pageConnect, repeaterConnect} = createConnect(store);
+
+pageConnect(() => {
+  connect(state => ({data: state}))($w('#repeater'));
+
+  $w('#add').onClick(() => {
+    store.dispatch({type: 'ADD_TODO', id: `${++nextId}`, description: $w('#input').value});
+    $w('#input').value = '';
+  });
+
+  repeaterConnect($w('#repeater'), ($item, _id) => {
+    connect(state => ({text: state.find(todo => todo._id === _id).description}))($item('#description'));
+
+    $item('#remove').onClick(() => store.dispatch({type: 'REMOVE_TODO', id: _id}));
+  });
+});
+```
+
+Full TodoMVC example:
 
 ```js
 import { createConnect } from '@wix/velo-redux';
