@@ -6,7 +6,7 @@
     "name": "Shahar Talmi",
     "email": "shahart@wix.com"
   },
-  "description": "Corvid bindings for Redux",
+  "description": "Velo bindings for Redux",
   "main": "dist/src/index.js",
   "module": "dist/es/src/index.js",
   "sideEffects": false,
@@ -31,6 +31,7 @@
     "@wix/yoshi": "^4.0.0",
     "husky": "~0.14.0",
     "lint-staged": "^7.2.2",
+    "prettier": "^2.2.1",
     "redux": "^4.0.4"
   },
   "lint-staged": {
