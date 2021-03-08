@@ -1,5 +1,7 @@
 # velo-redux
 
+![image](https://user-images.githubusercontent.com/1764161/110261325-72b35f00-7fb8-11eb-9f2c-cd919fec95d9.png)
+
 Velo bindings for Redux.
 
 Demo: https://shahartalmi36.wixsite.com/velo-redux ([Open in Wix Editor](https://editor.wix.com/html/editor/web/renderer/new?metaSiteId=e1f44b70-cd35-4b6b-8bb3-ac6b19337448&siteId=bb881bf8-92da-42e9-93ae-0dc99b61cddc))
@@ -7,7 +9,7 @@ Demo: https://shahartalmi36.wixsite.com/velo-redux ([Open in Wix Editor](https:/
 Counter example:
 
 ```js
-import { createConnect } from 'corvid-redux';
+import { createConnect } from '@wix/velo-redux';
 import { createStore } from 'redux';
 
 function reducer(state = 0, action) {
@@ -34,7 +36,7 @@ pageConnect(() => {
 TodoMVC example:
 
 ```js
-import { createConnect } from 'corvid-redux';
+import { createConnect } from '@wix/velo-redux';
 import { createStore } from 'redux';
 
 let counter = 0;
