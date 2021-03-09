@@ -1,4 +1,5 @@
 /* global $w */
+
 function updateProp(comp, prop, value) {
   if (prop === 'visible') {
     const hidden = !value;
