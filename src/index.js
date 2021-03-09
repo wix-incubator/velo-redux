@@ -72,6 +72,7 @@ export function createConnect(store) {
       await fn();
       pageConnecting = false;
       store.dispatch({ type: '_DUMMY' });
+      pageConnecting = false;
     });
   };
 
