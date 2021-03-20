@@ -13,10 +13,10 @@
     <packaging>pom</packaging>
 
     <groupId>com.wixpress</groupId>
-    <artifactId>corvid-redux</artifactId>
-    <name>corvid-redux</name>
+    <artifactId>velo-redux</artifactId>
+    <name>velo-redux</name>
     <description>
-        Corvid bindings for Redux
+        Velo bindings for Redux
     </description>
 
     <developers>
