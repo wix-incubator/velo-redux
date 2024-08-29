@@ -4,7 +4,7 @@
 
 Velo bindings for Redux.
 
-Demo: https://shahartalmi36.wixsite.com/velo-redux ([Open in Wix Editor](https://editor.wix.com/html/editor/web/renderer/new?metaSiteId=e1f44b70-cd35-4b6b-8bb3-ac6b19337448&siteId=bb881bf8-92da-42e9-93ae-0dc99b61cddc))
+Demo: https://shahata5.wixsite.com/velo-redux ([Open in Wix Editor]([https://editor.wix.com/html/editor/web/renderer/new?metaSiteId=e1f44b70-cd35-4b6b-8bb3-ac6b19337448&siteId=bb881bf8-92da-42e9-93ae-0dc99b61cddc](https://manage.wix.com/marketplace/redemption?id=eyJpdiI6Ijg5NmM5ZTU4MDRkMjRjNzg2YzNkNjA2Nzc0YWM3ZWM2IiwiZW5jcnlwdGVkRGF0YSI6IjEwN2FmZDlmODhlZTQzYThhZTM0ODFmYTlhZmIwNjYzY2RhYjJlMDdjM2NhMDY0ODk2N2YyNWZjYjkwM2EyMjI0NDRmYjU1MGNlMDU0NDJiNjVhNjI0MzIwMGYyNGQ5NDY3M2NjM2MxZGUxNGNiNjgyZjQ5YTZhODVlMzMwMGI0NjU1YjE5ODJiMjc1YTc3NzgxYWE1YWU3NDQ2OTJjYTdmYmNlMTllYmI0ZTdlMTgyODc0NmU2N2M0MDMwNmNlMWNiNzhkYmM4MmY1YjVhYjZlYzQ0Y2UxMmEwZjQxZmU5NzM4NWQxNjBlYTY4ZTkzNWYyMDRlZjM0MzA4NTAzNTAifQ==)))
 
 Blog post: https://shahata.medium.com/state-management-in-corvid-2ebfa8740abd
 
